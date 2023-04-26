@@ -12,6 +12,7 @@ const Honey=()=>{
             if(res.ok)
             {
                 setData(js)
+                console.log(js)
             }
     
         }
@@ -26,7 +27,8 @@ const Honey=()=>{
     <div>
         {data&&data.map((i)=>(
             <>
-            <Chart dd={i._id}/>
+            {/* <Chart dd={i._id}/> */}
+            <h1>{i._id}</h1>
             </>
         ))}
     </div>
