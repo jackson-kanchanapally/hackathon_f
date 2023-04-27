@@ -3,7 +3,8 @@ import React from 'react'
  import {
     FormControl,
     FormLabel,
-    
+    FormErrorMessage,
+    FormHelperText,
     Box,
     Input,
     Button,
@@ -96,7 +97,12 @@ const validationSchema = Yup.object().shape({
                  <FormControl isInvalid={errors.dob && touched.dob}>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input type='email' {...field} id="email" placeholder="Email" />
-                  <ErrorMessage name="email" component="div" />
+                  {/* <ErrorMessage name="email" component="div" /> */}
+                 
+     
+      
+        <FormErrorMessage>Email is required.</FormErrorMessage>
+      )}
                 </FormControl>
               )}
             </Field>
@@ -133,7 +139,9 @@ const validationSchema = Yup.object().shape({
               <FormControl isInvalid={errors.mobN && touched.mobN}>
                 <FormLabel htmlFor="firstName">Branch</FormLabel>
                 <Input type='text' {...field} id="branch" placeholder="Branch" />
-                <ErrorMessage name="branch" component="div" />
+                <Heading>
+                  <ErrorMessage name="branch" component="div" />
+                  </Heading>
               </FormControl>
             )}
           </Field>

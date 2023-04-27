@@ -9,6 +9,8 @@ import {
     Grid,
     GridItem,
   } from '@chakra-ui/react'
+import Formk from './Form'
+
 export default function Dash() {
   const url="/api/data/val"
   const [Data,setData]=React.useState([])
@@ -30,7 +32,7 @@ export default function Dash() {
       }
      }
       fetchData()
-  })
+  },[])
   let cse=0 
   let ece=0
   let ce=0
@@ -71,14 +73,16 @@ const propVals={
   eee:eee,
 }
   return (
-    <Grid
+   <Grid
   h='95vh'
  
   templateRows='repeat(2, 1fr)'
   templateColumns='repeat(4, 1fr)'
   gap={4}
 >
-<GridItem rowSpan={2} colSpan={1} bg='gray.50' />
+<GridItem rowSpan={2} colSpan={1} bg='gray.50' >
+  <Formk/>
+  </GridItem>
     {/* <Stack direction={'column'}> */}
 
     <GridItem colSpan={1} bg='gray.50' borderRadius='lg'>
@@ -110,8 +114,8 @@ const propVals={
   </GridItem>  
     <GridItem colSpan={3} bg='gray.50' borderRadius='lg'>
 
-        <Chart prop={propVals}/>
- 
+        {Data&&<Chart prop={propVals}/>}
+
     </GridItem>
     {/* </Stack> */}
     </Grid>
