@@ -7,42 +7,27 @@ import {
      HStack,
      Box,
      Center,
-     Button
+     Button,Text
 } from '@chakra-ui/react'
   import * as Yup from 'yup';
   import { Field, Form, Formik,ErrorMessage } from 'formik';
-  import { Link } from '@chakra-ui/react'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
- 
+  import { Link } from 'react-router-dom'
+//import { ExternalLinkIcon } from '@chakra-ui/icons'
+ import { useLogin } from '../hooks/useLogin';
 function Login() {
+  const {login,error,isLoading}=useLogin()
     const  initialValues={
-        uname:'',
+        email:'',
         pass:'',
         }
         const onSubmit=async(val,{resetForm})=>{
-            try{
-               const  res=await fetch('/api/data/login',{
-                 method:'POST',
-                 headers:{
-                   'Content-Type':'application/json',
-                 },
-                 body:JSON.stringify(val),
-               })
-               if(!res.ok)
-               {
-                console.log('err') 
-               }
-               if(res.ok)
-               {
-                console.log(res)
-               resetForm() 
-               }
-               
-            }catch(err){
-             console.log(err)
-            }
+          console.log(val.email+"  "+val.pass)
+           await login(val.email,val.pass)
         }
         const validationSchema = Yup.object().shape({
+           
+           
+            
             email: Yup.string().email('Invalid email').required('Email is required'),
             pass: Yup.string().required('password must contain minimum characters'),
           });
@@ -51,16 +36,15 @@ function Login() {
         <HStack spacing='24px'>
   <Box mb='300'
      mt='250'
-     ml='100'
-     mr='100'>
+     ml='15%' mr='20'>
     <Center>
-     <Image width={'40vw'}
+     <Image width={'35vw'}
      
     src='login1.png' alt='Dan Abramov' />
     </Center>
     </Box>
 
-    <Box  width={400}   mb='300' mr>
+    <Box bg='gray.50' width={400}  mb='300' mr>
         <Formik 
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -87,22 +71,22 @@ function Login() {
               )}
             </Field>
             <Button width={400}
-              mt={4} mb={10}
+              mt={4}
+              mb={2}
               colorScheme='teal'
-              
+              isDisabled={isLoading}
               type='submit'
             >
               Login
             </Button>
+            
+  Don't have an account? <Link to='/signup'>Sign Up</Link>
+
         </Form>
    
    ) } 
             </Formik>
-            <Link href='/signup' isExternal >
-            Don't have an account?
-
-  Signup <ExternalLinkIcon mx='2px' />
-</Link>
+            {error&&<Text>{error}</Text>}
             </Box>
   </HStack>
 

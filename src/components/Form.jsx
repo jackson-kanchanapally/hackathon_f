@@ -11,11 +11,17 @@ import {
   Center,
   Heading,
 } from "@chakra-ui/react";
+import {Link} from 'react-router-dom'
+import { ArrowLeftIcon } from '@chakra-ui/icons'
+import { IconButton } from '@chakra-ui/react'
 import * as Yup from "yup";
 import { useWebContext } from '../hooks/useWebContext'
-
+import Success from "./Success";
+import { useAuthContext } from '../hooks/useAuthContext'
 function Formk() {
+  const {user}=useAuthContext()
   const {dispatch}=useWebContext()
+  const [suc,setSuc]=React.useState(true)
   const initialValues = {
     fname: "",
     lname: "",
@@ -27,10 +33,17 @@ function Formk() {
   };
   const onSubmit = async (val, { resetForm }) => {
     try {
+      if(!user)
+      {
+        return
+      }
       const res = await fetch("/api/data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          
+            'Authorization':`Bearer ${user.token}`
+          
         },
         body: JSON.stringify(val),
       });
@@ -40,6 +53,7 @@ function Formk() {
       if (res.ok) {
        dispatch({type:'CREATE_DATA',payload:val})
         resetForm();
+        setSuc(false)
       }
     
     } catch (err) {
@@ -60,8 +74,12 @@ function Formk() {
   });
 
   return (
+    <>
+    <Link to='/'> <IconButton position={'absolute'} ml='20' mt='5'
+    icon={<ArrowLeftIcon/>}
+    ></IconButton></Link>
     <Center>
-      <Box width={500}>
+     {!suc ?<Success/>: <Box width={500}>
         <Heading width={500} mb="5" mt="5" ml='10'>
           STUDENT REGISTRATION
         </Heading>
@@ -188,8 +206,9 @@ function Formk() {
             </Form>
           )}
         </Formik>
-      </Box>
+      </Box>}
     </Center>
+    </>
   );
 }
 export default Formk;

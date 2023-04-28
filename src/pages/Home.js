@@ -1,6 +1,7 @@
-import { Box, Flex, HStack, Stack } from '@chakra-ui/react'
+import { Box, HStack } from '@chakra-ui/react'
 import React from 'react'
 import { useWebContext } from '../hooks/useWebContext'
+import { useAuthContext } from '../hooks/useAuthContext'
 import Chart from '../components/Chart'
 import {
     Stat,
@@ -12,24 +13,32 @@ import {
     StatArrow,
     GridItem,
   } from '@chakra-ui/react'
-import Formk from '../components/Form'
+
+import Side from '../components/Side'
+
 
 
 export default function Dash() {
-  // const {Data,dispatch}=useWebContext()
+ const {Data,dispatch}=useWebContext()
+  const {user}=useAuthContext()
   const url="/api/data/val"
-   const [Data,setData]=React.useState([])
+  //  const [Data,setData]=React.useState([])
   const [load,setLoad]=React.useState(true)
   React.useEffect(()=>{
      const fetchData=async()=>{
       try{
-          const res=await fetch(url)
+          const res=await fetch(url,{
+            headers:{
+              'Authorization':`Bearer ${user.token}`
+            }
+          })
           const js= await res.json()
           
           if(res.ok)
           {
               // dispatch({type:'SET_DASH_DATA',payload:js})
-              setData(js)
+              // setData(js)
+              dispatch({type:'SET_DATA',payload:js})
               setLoad(false)
 
           }
@@ -39,8 +48,10 @@ export default function Dash() {
           console.log(err)
       }
      }
-      fetchData()
-  },[])
+      if(user){
+        fetchData()
+      }
+  },[dispatch,user])
   let cse=0 
   let ece=0
   let ce=0
@@ -118,15 +129,17 @@ const propVals={
   it:it,
 }
   return (
+    <>
    <Grid
   h='95vh'
   templateRows='repeat(2, 1fr)'
   templateColumns='repeat(4, 1fr)'
-  gap={4}
+  gap={3}
+ 
 >
 <GridItem rowSpan={2} colSpan={1} bg='gray.50' >
-  {/* <Side/> */}
-  <Formk/>
+  <Side/>
+  {/* <Formk/> */}
   </GridItem>
 
     <GridItem colSpan={1} bg='gray.50' borderRadius='3xl' mt='30' mr='10'>
@@ -175,5 +188,6 @@ const propVals={
     </GridItem>
 
     </Grid>
+    </>
   )
 }

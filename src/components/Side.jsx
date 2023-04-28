@@ -1,14 +1,18 @@
 import React from 'react'
-import { Heading, Stack,Divider } from '@chakra-ui/react'
+import {Link} from 'react-router-dom'
+import { Stack,Divider,Button } from '@chakra-ui/react'
 export default function Side() {
   return (
     <Stack direction='column'>
-        <Heading>hello</Heading>
+     <Link to='/'>  <Button width='100%'> Dashboard</Button></Link>
         <Divider />
-        <Heading>hello</Heading>
         <Divider />
-        <Heading>hello</Heading>
+     <Link to='/register'>  <Button width='100%'> Register New Student</Button></Link>
         <Divider />
+        <Divider />
+        <Link to='/table'>  <Button width='100%'> Registered Students</Button></Link>
+        {/* <Heading>hello</Heading> */}
+        <Divider /> 
     </Stack>
   )
 }
