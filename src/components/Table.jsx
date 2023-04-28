@@ -7,12 +7,25 @@ import {
     TableContainer,
     Tbody,
     Center,
+    Button,
+ 
+  } from '@chakra-ui/react'
+  import {
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
   } from '@chakra-ui/react'
   import {React,useEffect,useState} from 'react'
+  import { useWebContext } from '../hooks/useWebContext'
 import Honey from './DataFetch'
+import Login from './Login'
 const url="/api/data"
   function Tables() {
-    const [data,setData]=useState([])
+     const {Data,dispatch}=useWebContext()
+    // const [data,setData]=useState([])
+
+    const[del,setDel]=useState(false)
     useEffect(()=>{
        const fetchData=async()=>{
         try{
@@ -21,8 +34,8 @@ const url="/api/data"
             
             if(res.ok)
             {
-                setData(js)
-                console.log(js)
+                // setData(js)
+                dispatch({type:'SET_DATA',payload:js})
             }
     
         }
@@ -31,10 +44,24 @@ const url="/api/data"
         }
        }
         fetchData()
-    },[])
+    },[dispatch])
+    const handleDelete=async(id)=>{
+      const res=await fetch('/api/data/'+id,{
+        method:'DELETE'
+      })
+      const js=await res.json()
+      if(res.ok){
+        dispatch({type:'DELETE_DATA',payload:js})
+        setDel(true)
+      }
+    }
+  const upId=(id)=>{
+    return id
+  }
+  
     return (
       <Center>
-        <TableContainer width='80vw'>
+        <TableContainer width='90vw' mt='20' mb='20'>
   <Table variant='striped' colorScheme='gray' >
     {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
     <Thead>
@@ -47,10 +74,11 @@ const url="/api/data"
         <Th>DOB</Th>
         <Th>Mobile no</Th>
         <Th>Branch</Th>
+        <Th>Actions</Th>
       </Tr>
     </Thead>
       <Tbody>
-      {data&&data.map((i)=>(
+      {Data&&Data.map((i)=>(
             
             <Tr key={i._id}>
                 <Td>{i.fname.charAt(0).toUpperCase() + i.fname.slice(1)+" "+i.lname.charAt(0).toUpperCase() + i.lname.slice(1)}</Td>
@@ -60,13 +88,16 @@ const url="/api/data"
                 <Td>{i.dob}</Td>
                 <Td>{i.phonenum}</Td>
                <Td>{i.branch.toUpperCase()}</Td>
+              <Td> <Button onClick={()=>{handleDelete(i._id)}}>Delete</Button > <Button onClick={()=>{upId(i._id)}}>Update</Button></Td>
             </Tr>
             
         ))}
       </Tbody>
   </Table>
 </TableContainer>
+       form {upId}
       </Center>
+
     )
   }
   

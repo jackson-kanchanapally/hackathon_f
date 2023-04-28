@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, Form, Formik, ErrorMessage } from "formik";
+import { Field, Form, Formik } from "formik";
 import {
   FormControl,
   FormLabel,
@@ -12,7 +12,10 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import * as Yup from "yup";
+import { useWebContext } from '../hooks/useWebContext'
+
 function Formk() {
+  const {dispatch}=useWebContext()
   const initialValues = {
     fname: "",
     lname: "",
@@ -35,9 +38,10 @@ function Formk() {
         console.log("err");
       }
       if (res.ok) {
-        console.log(res);
+       dispatch({type:'CREATE_DATA',payload:val})
         resetForm();
       }
+    
     } catch (err) {
       console.log(err);
     }

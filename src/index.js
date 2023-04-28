@@ -5,13 +5,15 @@ import App from './App';
 import { ColorModeScript } from '@chakra-ui/react'
 import reportWebVitals from './reportWebVitals';
 import theme from './theme'
-
+import { WebContextProvider } from './context/WebContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <>
+  <React.StrictMode>
+    <WebContextProvider>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     <App />
-  </>
+    </WebContextProvider>
+  </React.StrictMode>
 );
 
 
